@@ -1,21 +1,25 @@
-import time
-import pyautogui
+import streamlit as st
+import subprocess
 
-def openapp(sv):
-    # Press the Windows key
-    pyautogui.press('win')
+def open_application(app_name):
+    try:
+        # Use subprocess to run the specified app_name command
+        subprocess.run([app_name], check=True)
+    except subprocess.CalledProcessError as e:
+        st.error(f"Error opening {app_name}: {e}")
 
-    # Wait for the Start menu to open (you may need to adjust the duration)
-    time.sleep(1)
+def main():
+    st.title("Application Opener App")
 
-    # Type "calculator"
-    pyautogui.typewrite(sv)
+    # Get the application name from the user
+    app_name = st.text_input("Enter the application name:")
 
-    # Wait for search results (you may need to adjust the duration)
-    time.sleep(1)
+    if st.button("Open Application"):
+        if app_name:
+            open_application(app_name)
+            st.success(f"{app_name} opened successfully!")
+        else:
+            st.warning("Please enter an application name.")
 
-    # Press Enter
-    pyautogui.press('enter')
-
-sv = st.text_input("Enter the Application name:")
-openapp(sv)
+if __name__ == "__main__":
+    main()
